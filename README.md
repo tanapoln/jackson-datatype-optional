@@ -1,5 +1,5 @@
 Project for [Jackson](https://github.com/FasterXML/jackson) module (jar)
-that adds supports for JDK datatypes included in version 8 which can not be directly
+that adds supports for Optional datatypes included in version 8 which can not be directly
 supported by core databind due to baseline being JDK 6, excluding following:
 
 
@@ -7,10 +7,6 @@ supported by core databind due to baseline being JDK 6, excluding following:
 * Support for parameter names is via [Parameter Names](../../../jackson-module-parameter-names) module
 
 ## Status
-
-[![Build Status](https://travis-ci.org/FasterXML/jackson-datatype-jdk8.svg)](https://travis-ci.org/FasterXML/jackson-datatype-jdk8)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/)
-[![Javadoc](https://javadoc-emblem.rhcloud.com/doc/com.fasterxml.jackson.datatype/jackson-datatype-jdk8/badge.svg)](http://www.javadoc.io/doc/com.fasterxml.jackson.datatype/jackson-datatype-jdk8)
 
 As of Jackson 2.5, this module is stable and considered production ready.
 
@@ -22,9 +18,9 @@ To use module on Maven-based projects, use following dependency:
 
 ```xml
 <dependency>
-  <groupId>com.fasterxml.jackson.datatype</groupId>
-  <artifactId>jackson-datatype-jdk8</artifactId>
-  <version>2.6.3</version>
+  <groupId>com.tanapoln</groupId>
+  <artifactId>jackson-datatype-optional</artifactId>
+  <version>2.8.0</version>
 </dependency>    
 ```
 
@@ -36,12 +32,12 @@ Like all standard Jackson modules (libraries that implement Module interface), r
 
 ```java
 ObjectMapper mapper = new ObjectMapper();
-mapper.registerModule(new Jdk8Module());
-// Or, the more fluent version: ObjectMapper mapper = new ObjectMapper().registerModule(new Jdk8Module());
+mapper.registerModule(new OptionalModule());
+// Or, the more fluent version: ObjectMapper mapper = new ObjectMapper().registerModule(new OptionalModule());
 ```
 
 after which functionality is available for all normal Jackson operations:
-you can read JSON into supported JDK8 types, as well as write values of such types as JSON, so that for example:
+you can read JSON into supported `Optional` types, as well as write values of such types as JSON, so that for example:
 
 ```java
 class Contact {
