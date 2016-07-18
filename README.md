@@ -1,10 +1,4 @@
-Project for [Jackson](https://github.com/FasterXML/jackson) module (jar)
-that adds supports for Optional datatypes included in version 8 which can not be directly
-supported by core databind due to baseline being JDK 6, excluding following:
-
-
-* New Date types are supported by [JSR-310 module](../../../jackson-datatype-jsr310)
-* Support for parameter names is via [Parameter Names](../../../jackson-module-parameter-names) module
+A fork from `jackson-datatype-jdk8` that adds custom `Optional` class along with custom serializer/deserializer.
 
 ## Status
 
