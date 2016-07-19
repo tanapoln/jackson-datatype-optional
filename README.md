@@ -1,9 +1,5 @@
 A fork from `jackson-datatype-jdk8` that adds custom `Optional` class along with custom serializer/deserializer.
 
-## Status
-
-As of Jackson 2.5, this module is stable and considered production ready.
-
 ## Usage
 
 ### Maven dependency
