@@ -56,13 +56,18 @@ class Contact {
 
 Contact nullEmail = new Contact("Example Co.", null);
 String nullEmailJson = mapper.writeValueAsString(nullEmail);
-// prints: {"name":"Example Co.","email":null}
+// prints: {"name":"Example Co."}
 System.out.println(nullEmailJson);
 
-Contact emptyEmail = new Contact("Example Co.", Optional.empty());
-String emptyEmailJson = mapper.writeValueAsString(emptyEmail);
+Contact absentEmail = new Contact("Example Co.", Optional.absent());
+String absentEmailJson = mapper.writeValueAsString(absentEmail);
+// prints: {"name":"Example Co."}
+System.out.println(absentEmailJson);
+
+Contact presentNullEmail = new Contact("Example Co.", Optional.presentAsNull());
+String presentNullEmailJson = mapper.writeValueAsString(presentNullEmail);
 // prints: {"name":"Example Co.","email":null}
-System.out.println(emptyEmailJson);
+System.out.println(presentNullEmailJson);
 
 Contact withEmail = new Contact("Example Co.", Optional.of("info@example.com"));
 String withEmailJson = mapper.writeValueAsString(withEmail);
