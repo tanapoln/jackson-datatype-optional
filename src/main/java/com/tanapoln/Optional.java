@@ -38,9 +38,22 @@ public class Optional<T> {
      * @param <T>
      * @return
      */
-    public static <T> Optional<T> empty() {
+    public static <T> Optional<T> absent() {
         Optional<T> o = new Optional<>();
         o.present = false;
+
+        return o;
+    }
+
+    /**
+     * Return Optional with present=true and value=null.
+     *
+     * @param <T>
+     * @return
+     */
+    public static <T> Optional<T> presentAsNull() {
+        Optional<T> o = new Optional<>();
+        o.present = true;
 
         return o;
     }

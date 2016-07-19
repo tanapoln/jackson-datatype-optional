@@ -73,7 +73,7 @@ public class OptionalBasicTest extends ModuleTestBase
 		Optional<?> value = MAPPER.readValue("null",
 				new TypeReference<Optional<String>>() {
 				});
-		assertFalse(value.isPresent());
+		assertTrue(value.isPresent());
 	}
 
 	public void testDeserSimpleString() throws Exception {
@@ -112,7 +112,12 @@ public class OptionalBasicTest extends ModuleTestBase
 	}
 
 	public void testSerAbsent() throws Exception {
-		String value = MAPPER.writeValueAsString(Optional.empty());
+		String value = MAPPER.writeValueAsString(Optional.absent());
+		assertEquals("", value);
+	}
+
+	public void testSerPresent() throws Exception {
+		String value = MAPPER.writeValueAsString(Optional.presentAsNull());
 		assertEquals("null", value);
 	}
 
@@ -144,7 +149,7 @@ public class OptionalBasicTest extends ModuleTestBase
 
 	public void testSerNonNull() throws Exception {
 		OptionalData data = new OptionalData();
-		data.myString = Optional.empty();
+		data.myString = Optional.absent();
 		// NOTE: pass 'true' to ensure "legacy" setting
 		String value = mapperWithModule(true).setSerializationInclusion(
 				JsonInclude.Include.NON_NULL).writeValueAsString(data);
@@ -153,7 +158,7 @@ public class OptionalBasicTest extends ModuleTestBase
 
 	public void testSerOptDefault() throws Exception {
 		OptionalData data = new OptionalData();
-		data.myString = Optional.empty();
+		data.myString = Optional.absent();
 		String value = mapperWithModule().setSerializationInclusion(
 				JsonInclude.Include.ALWAYS).writeValueAsString(data);
 		assertEquals("{\"myString\":null}", value);
@@ -169,13 +174,13 @@ public class OptionalBasicTest extends ModuleTestBase
 
 	public void testSerOptDisableAsNull() throws Exception {
 		final OptionalData data = new OptionalData();
-		data.myString = Optional.empty();
+		data.myString = Optional.absent();
 
-		OptionalModule mod = new OptionalModule().configureAbsentsAsNulls(false);
+		OptionalModule mod = new OptionalModule();
 		ObjectMapper mapper = new ObjectMapper().registerModule(mod)
 				.setSerializationInclusion(JsonInclude.Include.NON_NULL);
 
-		assertEquals("{\"myString\":null}", mapper.writeValueAsString(data));
+		assertEquals("{}", mapper.writeValueAsString(data));
 
 		// but do exclude with NON_EMPTY
 		mapper = new ObjectMapper().registerModule(mod)
@@ -230,7 +235,7 @@ public class OptionalBasicTest extends ModuleTestBase
 
 		List<Optional<String>> list = new ArrayList<Optional<String>>();
 		list.add(Optional.of("2014-1-22"));
-		list.add(Optional.<String> empty());
+		list.add(Optional.<String>presentAsNull());
 		list.add(Optional.of("2014-1-23"));
 
 		String str = MAPPER.writeValueAsString(list);

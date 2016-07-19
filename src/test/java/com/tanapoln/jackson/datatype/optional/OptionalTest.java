@@ -158,7 +158,7 @@ public class OptionalTest extends ModuleTestBase
 
     public void testStringAbsent() throws Exception
     {
-        Optional<String> empty = Optional.empty();
+        Optional<String> empty = Optional.absent();
         assertFalse(roundtrip(empty, OPTIONAL_STRING_TYPE).isPresent());
     }
 
@@ -199,7 +199,7 @@ public class OptionalTest extends ModuleTestBase
 
     public void testBeanAbsent() throws Exception
     {
-        Optional<TestBean> empty = Optional.empty();
+        Optional<TestBean> empty = Optional.absent();
         assertFalse(roundtrip(empty, OPTIONAL_BEAN_TYPE).isPresent());
     }
 
@@ -212,7 +212,7 @@ public class OptionalTest extends ModuleTestBase
     // [issue#4]
     public void testBeanWithCreator() throws Exception
     {
-        final Issue4Entity emptyEntity = new Issue4Entity(Optional.<String>empty());
+        final Issue4Entity emptyEntity = new Issue4Entity(Optional.<String>absent());
         final String json = MAPPER.writeValueAsString(emptyEntity);
         
         final Issue4Entity deserialisedEntity = MAPPER.readValue(json, Issue4Entity.class);
@@ -236,8 +236,7 @@ public class OptionalTest extends ModuleTestBase
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL);
         assertEquals(aposToQuotes("{'value':'foo'}"),
                 mapper.writeValueAsString(new OptionalStringBean("foo")));
-        // absent is not strictly null so
-        assertEquals(aposToQuotes("{'value':null}"),
+        assertEquals(aposToQuotes("{}"),
                 mapper.writeValueAsString(new OptionalStringBean((String) null)));
 
         // however:
@@ -245,8 +244,11 @@ public class OptionalTest extends ModuleTestBase
                 .setSerializationInclusion(JsonInclude.Include.NON_ABSENT);
         assertEquals(aposToQuotes("{'value':'foo'}"),
                 mapper.writeValueAsString(new OptionalStringBean("foo")));
+        // absent is not strictly null so
+        assertEquals(aposToQuotes("{'value':null}"),
+                mapper.writeValueAsString(new OptionalStringBean((String) null)));
         assertEquals(aposToQuotes("{}"),
-                mapper.writeValueAsString(new OptionalStringBean(Optional.<String>empty())));
+                mapper.writeValueAsString(new OptionalStringBean(Optional.<String>absent())));
     }
 
 //    public void testExcludeIfOptionalLongAbsent() throws Exception
@@ -275,14 +277,14 @@ public class OptionalTest extends ModuleTestBase
         String json = MAPPER.writeValueAsString(new BooleanBean(true));
         assertEquals(aposToQuotes("{'value':true}"), json);
         json = MAPPER.writeValueAsString(new BooleanBean());
-        assertEquals(aposToQuotes("{'value':null}"), json);
+        assertEquals(aposToQuotes("{}"), json);
         json = MAPPER.writeValueAsString(new BooleanBean(null));
         assertEquals(aposToQuotes("{'value':null}"), json);
 
         // then deser
         BooleanBean b = MAPPER.readValue(aposToQuotes("{'value':null}"), BooleanBean.class);
         assertNotNull(b.value);
-        assertFalse(b.value.isPresent());
+        assertTrue(b.value.isPresent());
 
         b = MAPPER.readValue(aposToQuotes("{'value':false}"), BooleanBean.class);
         assertNotNull(b.value);
@@ -323,6 +325,8 @@ public class OptionalTest extends ModuleTestBase
 
     private <T> Optional<T> roundtrip(Optional<T> obj, TypeReference<Optional<T>> type) throws IOException
     {
-        return MAPPER.readValue(MAPPER.writeValueAsBytes(obj), type);
+        byte[] bytes = MAPPER.writeValueAsBytes(obj);
+        if (bytes.length == 0) return Optional.absent();
+        return MAPPER.readValue(bytes, type);
     }
 }

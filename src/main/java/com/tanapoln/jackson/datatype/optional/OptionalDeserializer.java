@@ -84,7 +84,10 @@ final class OptionalDeserializer
 
     @Override
     public Optional<?> getNullValue(DeserializationContext ctxt) {
-        return Optional.empty();
+        if (ctxt.getParser().getCurrentToken() == JsonToken.VALUE_NULL) {
+            return Optional.presentAsNull();
+        }
+        return Optional.absent();
     }
 
     /*

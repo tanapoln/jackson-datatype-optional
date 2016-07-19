@@ -13,7 +13,7 @@ public class OptionalnclusionTest extends ModuleTestBase
 {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     public static final class OptionalData {
-        public Optional<String> myString = Optional.empty();
+        public Optional<String> myString = Optional.absent();
     }
 
     // for [datatype-optional#18]
@@ -100,5 +100,14 @@ public class OptionalnclusionTest extends ModuleTestBase
         ObjectMapper mapper = mapperWithModule().setPropertyInclusion(incl);
         assertEquals("{\"myData\":true}",
                 mapper.writeValueAsString(OptionalGenericData.construct(Boolean.TRUE)));
+    }
+
+    public void testSerOptNonDefault() throws Exception
+    {
+        OptionalData data = new OptionalData();
+        data.myString = null;
+        String value = mapperWithModule().setSerializationInclusion(
+                JsonInclude.Include.NON_DEFAULT).writeValueAsString(data);
+        assertEquals("{}", value);
     }
 }

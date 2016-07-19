@@ -54,12 +54,32 @@ public class OptionalUnwrappedTest extends ModuleTestBase
 		assertEquals(jsonExp, jsonAct);
 	}
 
+	public void testUntypedWithOptionalsButNameIsNull() throws Exception
+	{
+		final ObjectMapper mapper = mapperWithModule(false);
+		String jsonExp = aposToQuotes("{'XX.name':null}");
+		OptionalParent value = new OptionalParent();
+		value.child.get().name = null;
+		String jsonAct = mapper.writeValueAsString(value);
+		assertEquals(jsonExp, jsonAct);
+	}
+
+	public void testUntypedWithOptionalsButChildIsPresentAsNull() throws Exception
+	{
+		final ObjectMapper mapper = mapperWithModule(false);
+		String jsonExp = aposToQuotes("{}");
+		OptionalParent value = new OptionalParent();
+		value.child = Optional.presentAsNull();
+		String jsonAct = mapper.writeValueAsString(value);
+		assertEquals(jsonExp, jsonAct);
+	}
+
 	// for [datatype-optional#20]
 	public void testShouldSerializeUnwrappedOptional() throws Exception {
          final ObjectMapper mapper = mapperWithModule(false);
 	    
 	    assertEquals("{\"id\":\"foo\"}",
-	            mapper.writeValueAsString(new Bean("foo", Optional.<Bean2>empty())));
+	            mapper.writeValueAsString(new Bean("foo", Optional.<Bean2>absent())));
 	}
 
 	// for [datatype-optional#26]

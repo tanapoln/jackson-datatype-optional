@@ -11,7 +11,7 @@ public class TestConfigureAbsentsAsNulls extends ModuleTestBase
 {
     @JsonAutoDetect(fieldVisibility=Visibility.ANY)
     public static final class OptionalData {
-        public Optional<String> myString = Optional.empty();
+        public Optional<String> myString = Optional.absent();
     }
 
     /*
@@ -31,11 +31,11 @@ public class TestConfigureAbsentsAsNulls extends ModuleTestBase
 
     public void testConfigAbsentsAsNullsFalse() throws Exception {
         ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new OptionalModule().configureAbsentsAsNulls(false));
+        mapper.registerModule(new OptionalModule());
 
         OptionalData data = new OptionalData();
         String value = mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL).writeValueAsString(data);
-        assertEquals("{\"myString\":null}", value);
+        assertEquals("{}", value);
     }
 
     public void testConfigNonAbsentAbsentsAsNullsTrue() throws Exception {

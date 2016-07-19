@@ -27,8 +27,8 @@
     <javac.target.version>1.7</javac.target.version>
 
     <!-- Generate PackageVersion.java into this directory. -->
-    <packageVersion.dir>com/fasterxml/jackson/datatype/jdk8</packageVersion.dir>
-    <packageVersion.package>${project.groupId}.jdk8</packageVersion.package>
+    <packageVersion.dir>com/tanapoln/jackson/datatype/optional</packageVersion.dir>
+    <packageVersion.package>${project.groupId}.optional</packageVersion.package>
   </properties>
 
   <dependencies>
@@ -59,7 +59,7 @@
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
           <excludes>
-            <exclude>com/fasterxml/jackson/failing/*.java</exclude>
+            <exclude>com/tanapoln/jackson/failing/*.java</exclude>
           </excludes>
         </configuration>
       </plugin>

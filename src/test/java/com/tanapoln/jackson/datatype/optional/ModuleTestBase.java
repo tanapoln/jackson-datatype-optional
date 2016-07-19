@@ -23,7 +23,6 @@ public abstract class ModuleTestBase extends junit.framework.TestCase
     {
         ObjectMapper mapper = new ObjectMapper();
         OptionalModule module = new OptionalModule();
-        module.configureAbsentsAsNulls(absentsAsNulls);
         mapper.registerModule(module);
         return mapper;
     }

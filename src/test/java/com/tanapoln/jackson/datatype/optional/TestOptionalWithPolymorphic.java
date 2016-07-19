@@ -14,12 +14,12 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 public class TestOptionalWithPolymorphic extends ModuleTestBase
 {
     static class ContainerA {
-        @JsonProperty private Optional<String> name = Optional.empty();
-        @JsonProperty private Optional<Strategy> strategy = Optional.empty();
+        @JsonProperty private Optional<String> name = Optional.absent();
+        @JsonProperty private Optional<Strategy> strategy = Optional.absent();
     }
 
     static class ContainerB {
-        @JsonProperty private Optional<String> name = Optional.empty();
+        @JsonProperty private Optional<String> name = Optional.absent();
         @JsonProperty private Strategy strategy = null;
     }
 

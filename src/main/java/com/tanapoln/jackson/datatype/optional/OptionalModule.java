@@ -7,11 +7,11 @@ import com.fasterxml.jackson.databind.Module;
 public class OptionalModule extends Module
 {
     /**
-     * Configuration setting that determines whether `Optional.empty()` is
+     * Configuration setting that determines whether `Optional.absent()` is
      * considered "same as null" for serialization purposes; that is, to be
      * filtered same as nulls are.
      * If enabled, absent values are treated like nulls; if disabled, they are not.
-     * In either case, absent values are always considered "empty".
+     * In either case, absent values are always considered "absent".
      *<p>
      * Default value is `false` for backwards compatibility (2.5 and prior
      * only had this behavior).
@@ -27,11 +27,7 @@ public class OptionalModule extends Module
         context.addDeserializers(new OptionalDeserializers());
         // And to fully support Optionals, need to modify type info:
         context.addTypeModifier(new OptionalTypeModifier());
-
-        // Allow enabling "treat Optional.empty() like Java nulls"
-        if (_cfgHandleAbsentAsNull) {
-            context.addBeanSerializerModifier(new OptionalBeanSerializerModifier());
-        }
+        context.addBeanSerializerModifier(new OptionalBeanSerializerModifier());
     }
 
     @Override
@@ -41,9 +37,9 @@ public class OptionalModule extends Module
 
     /**
      * Configuration method that may be used to change configuration setting
-     * <code>_cfgHandleAbsentAsNull</code>: enabling means that `Optional.empty()` values
+     * <code>_cfgHandleAbsentAsNull</code>: enabling means that `Optional.absent()` values
      * are handled like Java nulls (wrt filtering on serialization); disabling that
-     * they are only treated as "empty" values, but not like native Java nulls.
+     * they are only treated as "absent" values, but not like native Java nulls.
      * Recommended setting for this value is `false`. For compatibility with older versions
      * of other "optional" values (like Guava optionals), it can be set to 'true'. The
      * default is `false` for backwards compatibility.

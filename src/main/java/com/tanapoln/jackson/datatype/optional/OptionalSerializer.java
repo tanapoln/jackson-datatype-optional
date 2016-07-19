@@ -239,13 +239,20 @@ public class OptionalSerializer
         throws IOException
     {
         if (!opt.isPresent()) {
-            // [datatype-optional#20]: can not write `null` if unwrapped
-            if (_unwrapper == null) {
+            if (provider.getConfig().getDefaultPropertyInclusion().getValueInclusion() == JsonInclude.Include.ALWAYS) {
                 provider.defaultSerializeNull(gen);
             }
+            // [datatype-optional#20]: can not write `null` if unwrapped
+//            if (_unwrapper == null) {
+//                provider.defaultSerializeNull(gen);
+//            }
             return;
         }
         Object value = opt.get();
+        if (value == null) {
+            provider.defaultSerializeNull(gen);
+            return;
+        }
         JsonSerializer<Object> ser = _valueSerializer;
         if (ser == null) {
             ser = _findCachedSerializer(provider, value.getClass());
@@ -253,11 +260,7 @@ public class OptionalSerializer
         if (_valueTypeSerializer != null) {
             ser.serializeWithType(value, gen, provider, _valueTypeSerializer);
         } else {
-            if (value == null) {
-                provider.defaultSerializeNull(gen);
-            } else {
-                ser.serialize(value, gen, provider);
-            }
+            ser.serialize(value, gen, provider);
         }
     }
 
